@@ -1,0 +1,12 @@
+{
+  "name": "obra-y-empleo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Calculadora estática de empleo asociado a inversión pública en México",
+  "scripts": {
+    "test": "node --test tests/*.test.cjs"
+  },
+  "devDependencies": {
+    "jsdom": "^30.0.1"
+  }
+}
