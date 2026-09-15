@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="es-MX">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Estima los empleos directos, indirectos y totales de la construcción de vivienda.">
+<title>Calculadora de empleo en construcción de vivienda</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230c4a50'/%3E%3Cpath d='M6 15L16 6l10 9v12H6z' fill='white'/%3E%3Cpath d='M13 19h6v8h-6z' fill='%230c4a50'/%3E%3C/svg%3E">
+<style>
+:root{color-scheme:light;--ink:#172d36;--muted:#52656c;--accent:#0c4a50;--line:#d9e3e7;--paper:#fff;--back:#f1f5f8}
+*{box-sizing:border-box}body{margin:0;background:var(--back);color:var(--ink);font:1rem/1.65 system-ui,-apple-system,"Segoe UI",sans-serif}main{max-width:1080px;margin:auto;padding:48px 28px 32px}.eyebrow{color:var(--accent);font-size:.8rem;letter-spacing:.13em;font-weight:750;text-transform:uppercase;margin:0 0 10px}h1{font-size:clamp(1.8rem,4vw,2.7rem);line-height:1.18;letter-spacing:-.035em;margin:0 0 14px;max-width:800px}header>p:last-child{color:var(--muted);margin:0 0 28px;max-width:730px}h2{font-size:1.4rem;letter-spacing:-.02em;line-height:1.3;margin:0 0 18px}h3{font-size:1.05rem;margin:0 0 10px}.calculator{border:1px solid var(--line);border-radius:20px;overflow:hidden;background:var(--paper);box-shadow:0 14px 40px #17333d08}.entry{padding:28px 30px;display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:26px}.entry p{margin:6px 0 0;color:var(--muted);font-size:.9rem}label{display:block;font-weight:700;margin-bottom:8px}.input-wrap{position:relative}input{width:100%;min-height:66px;padding:9px 120px 9px 18px;border:2px solid #94b1ba;border-radius:10px;color:var(--ink);background:white;font:650 1.7rem/1.4 system-ui;outline-offset:4px}input:focus{outline:3px solid #12818d;border-color:var(--accent)}input[aria-invalid="true"]{border-color:#b53c3c}.unit{position:absolute;right:18px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none;font-size:.9rem}.error{min-height:1.5em;font-size:.85rem;color:#9d2929;margin:5px 0 0}.rule{font-size:1.1rem;color:var(--accent);font-weight:650}.rule small{display:block;color:var(--muted);font-weight:400;font-size:.9rem}.results{display:grid;grid-template-columns:1fr 1fr 1.15fr;border-top:1px solid var(--line)}.result{padding:24px 28px;min-width:0}.result+.result{border-left:1px solid var(--line)}.result h3{font-size:.95rem;font-weight:600;margin:0 0 8px}.number{display:block;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:750;letter-spacing:-.04em;line-height:1.25;overflow-wrap:anywhere;font-variant-numeric:tabular-nums}.factor{font-size:.85rem;color:var(--muted);margin:10px 0 0}.total{background:var(--accent);color:white}.total .factor{color:#d0e8e8}.note{font-size:.85rem;color:var(--muted);margin:13px 3px 0}.method{margin-top:35px;padding:28px 30px;background:var(--paper);border:1px solid var(--line);border-radius:16px}.method-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:32px}.method p{margin:0 0 14px}.method p:last-child{margin-bottom:0}.formula{background:#eff5f7;border-radius:8px;padding:13px 10px;text-align:center;font:1.1rem/1.6 Georgia,serif;margin:14px 0;overflow-wrap:anywhere}.definitions{font-size:.9rem;color:var(--muted)}.source{border-top:1px solid var(--line);margin-top:22px;padding-top:18px;font-size:.85rem;color:var(--muted)}a{color:var(--accent);text-underline-offset:3px}a:hover{text-decoration-thickness:2px}a:focus-visible{outline:3px solid #12818d;outline-offset:4px}footer{margin-top:20px;font-size:.8rem;color:var(--muted)}noscript{display:block;padding:18px;background:#fff0d5;color:#643f00}
+@media(max-width:700px){main{padding:26px 18px}.entry{grid-template-columns:1fr;gap:12px;padding:22px}.results{grid-template-columns:1fr 1fr}.result{padding:20px}.total{grid-column:1/-1}.result.total{border-left:0}.method{padding:23px 21px}.method-grid{grid-template-columns:1fr;gap:24px}.number{font-size:2rem}.rule{font-size:1rem}.method{margin-top:26px}}
+@media print{body{background:white;font-size:10pt}main{padding:0;max-width:none}header>p:last-child{margin-bottom:16px}h1{font-size:24pt}.calculator{box-shadow:none}.entry{padding:16px}.result{padding:16px}.total{background:#e6eff0;color:var(--ink)}.total .factor{color:var(--muted)}.method{margin-top:20px;padding:18px}.method-grid{grid-template-columns:1.2fr 1fr}.source{font-size:9pt}.calculator,.method{break-inside:avoid}.error:empty{display:none}footer{display:none}}
+.choices{padding:24px 30px 0}.choices select{width:100%;padding:12px;border:1px solid #94b1ba;border-radius:8px;background:white;color:var(--ink);font:inherit}.choices select:focus-visible{outline:3px solid #12818d;outline-offset:3px}.reference{margin-top:24px}.reference ul{padding-left:22px}.reference li{margin:6px 0}
+</style>
+</head>
+<body>
+<main>
+<header><h1>Calculadora de empleo<br>en construcción de vivienda</h1><p>Ingresa el número de viviendas para estimar los empleos directos, indirectos y totales según el tipo de intervención.</p></header>
+<noscript>Activa JavaScript en tu navegador para utilizar el cálculo instantáneo. Selecciona el factor directo de la metodología y multiplícalo por las viviendas; los indirectos equivalen a viviendas × 1.5.</noscript>
+<section class="calculator" aria-label="Calculadora de empleos">
+<div class="choices"><label for="tipo">Tipo de intervención</label><select id="tipo"><option value="nueva">Vivienda nueva / Reconstrucción total</option><option value="parcial">Reconstrucción parcial</option><option value="ampliacion">Ampliación</option><option value="mejoramiento">Mejoramiento</option></select></div><div class="entry"><div><label for="viviendas">Número de viviendas</label><div class="input-wrap"><input id="viviendas" type="text" inputmode="numeric" value="100" autocomplete="off" spellcheck="false" aria-describedby="hint error"><span class="unit">viviendas</span></div><p id="hint">Escribe un número entero igual o mayor que cero.</p><div id="error" class="error" aria-live="polite"></div></div><div class="rule"><span id="rule-total">1 vivienda = 6 empleos estimados</span><small id="rule-detail">4.5 directos + 1.5 indirectos</small></div></div>
+<div class="results" role="region" aria-label="Resultados estimados" aria-live="polite" aria-atomic="true">
+<div class="result"><h3>Empleos directos</h3><output class="number" id="directos" for="viviendas tipo">—</output><p class="factor" id="factor-directo">Viviendas × 4.5</p></div>
+<div class="result"><h3>Empleos indirectos</h3><output class="number" id="indirectos" for="viviendas tipo">—</output><p class="factor">Viviendas × 1.5</p></div>
+<div class="result total"><h3>Empleos totales</h3><output class="number" id="total" for="viviendas tipo">—</output><p class="factor" id="factor-total">Viviendas × 6</p></div>
+</div></section>
+<p class="note">Los resultados son estimaciones con factores promedio por vivienda; por ello pueden incluir decimales.</p>
+
+<section class="method" aria-labelledby="method-title"><h2 id="method-title">Metodología</h2>
+<p>Esta calculadora se basa en el estudio <cite>Metodología del cálculo de empleos directos e indirectos generados con la construcción de vivienda</cite>, publicado en 2021 por la <strong>Comisión Nacional de Vivienda (CONAVI)</strong>. El estudio combina un modelo econométrico, información de prestadores de servicios y la Matriz de Insumo-Producto de INEGI para estimar los empleos asociados a las distintas líneas de apoyo de sus programas de vivienda.</p>
+<div class="method-grid"><div><h3>Empleos directos</h3><p>CONAVI parte de una función de producción Cobb-Douglas y la linealiza para estimar una <strong>regresión lineal en logaritmos (log-log)</strong>:</p>
+<div class="formula" aria-label="Logaritmo natural de Y sub t igual a beta cero más beta uno por logaritmo natural de L sub t más épsilon sub t">ln(Y<sub>t</sub>) = β<sub>0</sub> + β<sub>1</sub> ln(L<sub>t</sub>) + ε<sub>t</sub></div>
+<p class="definitions">Y<sub>t</sub>: valor de la producción residencial; L<sub>t</sub>: personal ocupado; ε<sub>t</sub>: error; β<sub>0</sub> y β<sub>1</sub>: parámetros.</p>
+<p>La elasticidad estimada es aproximadamente <strong>1.99</strong>: 1% más de personal ocupado se asocia con cerca de 1.99% más de producción. Junto con la producción promedio por trabajador y el monto de referencia, el procedimiento arroja <strong>4.5 empleos directos por vivienda nueva</strong>.</p></div>
+<div><h3>Empleos indirectos</h3><p>CONAVI utiliza la Matriz de Insumo-Producto de INEGI. La suma de los coeficientes directos e indirectos de la columna <strong>Edificación directa</strong> da un ponderador de <strong>1.4313</strong>.</p><p>El estudio reporta <strong>1.5 empleos indirectos por vivienda</strong>. La calculadora aplica ese factor a las viviendas ingresadas.</p><p class="definitions">Factores de referencia por línea de apoyo, en el contexto de los programas de producción social de vivienda asistida de CONAVI.</p></div></div>
+<div class="reference"><h3>Factores por tipo de intervención</h3><p>Para cada modalidad, los empleos estimados se calculan multiplicando el número de viviendas por el factor correspondiente:</p><ul><li><strong>Vivienda nueva o reconstrucción total:</strong> 4.5 directos + 1.5 indirectos = 6 totales.</li><li><strong>Reconstrucción parcial:</strong> 3 directos + 1.5 indirectos = 4.5 totales.</li><li><strong>Ampliación:</strong> 3.5 directos + 1.5 indirectos = 5 totales.</li><li><strong>Mejoramiento:</strong> 3 directos + 1.5 indirectos = 4.5 totales.</li></ul><p class="definitions">Los factores de reconstrucción parcial, ampliación y mejoramiento se apoyan en la encuesta a prestadores de servicios del estudio.</p></div><div class="source"><strong>Fuente</strong><br>Comisión Nacional de Vivienda (CONAVI). (2021). <cite>Metodología del cálculo de empleos directos e indirectos generados con la construcción de vivienda.</cite> Sistema de Información de CONAVI (SIESCO), Ciudad de México.<br><a href="https://siesco.conavi.gob.mx/doc/analisis/2021/Metodologia_del_calculo_de_empleos.pdf" target="_blank" rel="noopener noreferrer">Consultar el estudio completo de CONAVI (PDF)</a></div>
+</section>
+</main>
+<script>
+'use strict';
+const input = document.getElementById('viviendas');
+const error = document.getElementById('error');
+const outputs = ['directos', 'indirectos', 'total'].map(id => document.getElementById(id));
+const format = new Intl.NumberFormat('es-MX', { maximumFractionDigits: 1 });
+const tipo = document.getElementById('tipo');
+function update() {
+  const directo = {nueva:4.5,parcial:3,ampliacion:3.5,mejoramiento:3}[tipo.value];
+  const total = directo + 1.5;
+  document.getElementById('rule-total').textContent = '1 vivienda = ' + format.format(total) + ' empleos estimados';
+  document.getElementById('rule-detail').textContent = format.format(directo) + ' directos + 1.5 indirectos';
+  document.getElementById('factor-directo').textContent = 'Viviendas × ' + format.format(directo);
+  document.getElementById('factor-total').textContent = 'Viviendas × ' + format.format(total);
+  const raw = input.value.trim();
+  const n = Number(raw);
+  const valid = /^\d+$/.test(raw) && Number.isSafeInteger(n) && n <= 1000000000000;
+  input.setAttribute('aria-invalid', raw !== '' && !valid ? 'true' : 'false');
+  error.textContent = raw === '' ? '' : !valid ? 'Ingresa un entero entre 0 y 1,000,000,000,000, sin comas ni puntos.' : '';
+  [directo, 1.5, total].forEach((factor, i) => { outputs[i].textContent = valid ? format.format(n * factor) : '—'; });
+}
+input.addEventListener('input', update);
+tipo.addEventListener('change', update);
+update();
+</script>
+</body>
+</html>
