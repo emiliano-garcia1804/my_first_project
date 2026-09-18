@@ -1,31 +1,32 @@
-# Obra y empleo
+# Calculadora de empleo para infraestructura
 
-Calculadora en español de empleo asociado a inversión pública en México. Sitio estático compatible con GitHub Pages; no necesita compilación.
+Calculadora en español de empleo asociado a obras públicas. Sitio estático compatible con GitHub Pages; no necesita compilación.
 
 ## Uso local
 
 Abre `index.html` en un navegador, o ejecuta `python -m http.server 8765 --bind 127.0.0.1` y visita `http://127.0.0.1:8765`.
 
-Publica juntos `index.html`, `styles.css` y `app.js` en la carpeta configurada en GitHub Pages. Las fuentes tipográficas de Google son opcionales: hay fuentes del sistema como respaldo.
+Publica juntos `index.html`, `styles.css` y `app.js`. Las fuentes de Google son opcionales; hay fuentes del sistema como respaldo.
 
-## Alcance del cálculo
+## Cálculo
 
-La operación principal siempre es **empleos por millón × inversión en millones = empleos estimados**. Las cuatro categorías incluyen 12 tipos de proyecto. La página documenta fuentes, año, alcance y limitaciones junto a los resultados.
+- Movilidad: Calles u Otros proyectos de movilidad, con inversión en millones de pesos.
+- Agua: Obras en infraestructura hidráulica, con inversión en millones de pesos.
+- Infraestructura: Obra de infraestructura pública, con inversión en millones de pesos.
+- Vivienda: número de viviendas y tipo de intervención, sin costo ni inversión.
 
-- SICT (2025): 1 directo + 2 indirectos por millón para infraestructura carretera. Puentes usa este parámetro como aproximación del programa.
-- Agua para Campeche (2025): razón aproximada de 3,000 empleos / 1,400 mdp, calculada por esta página a partir del anuncio del proyecto. No es un coeficiente sectorial de Conagua.
-- CONAVI (2021), p. 37: factores por intervención convertidos a empleos por millón mediante un costo promedio ingresado por el usuario. Se conservan las cuatro modalidades originales.
-- Banobras (2013): 4 empleos por millón como referencia histórica general, sin desglose. Su aplicación a otros sectores es una aproximación, sin actualización por inflación.
-- Coeficiente propio: permite modelar otras inversiones con atribución y año aportados por el usuario.
+Calles utiliza como aproximación el parámetro carretero SICT (2025): 1 empleo directo y 2 indirectos por millón de pesos. No se convierte a kilómetros sin una referencia compatible.
 
-No se inventan desgloses donde la fuente no los publica. No se modelan inflación, empleos-año, personal de operación ni efectos netos. No se extrapolan factores universales por m² o km. Las referencias completas están enlazadas en la página.
+Otros proyectos de movilidad e infraestructura pública usan la referencia general histórica de Banobras (2013): 4 empleos por millón, sin desglose ni ajuste por inflación. No es un coeficiente específico para movilidad urbana o infraestructura hidráulica. Agua utiliza el caso Agua para Campeche (2025): 3,000 / 1,400 empleos por millón, sin redondear el coeficiente. Su aplicación a otras obras hidráulicas es una aproximación, no un parámetro sectorial.
 
-Los escenarios comparados se conservan en memoria hasta recargar la página y no se suman. No se envían los datos del cálculo a un servidor.
+Vivienda multiplica el número de viviendas por los factores CONAVI (2021, p. 37): 4.5 directos en vivienda nueva, 3 en reconstrucción parcial, 3.5 en ampliación y 3 en mejoramiento; 1.5 indirectos en las cuatro intervenciones.
+
+No se envían datos a un servidor. La interfaz no incluye coeficientes propios, comparación de escenarios ni botón de impresión.
 
 ## Verificación
 
-Con Node.js 22 o posterior: `npm ci` y `npm test`. Las dependencias son únicamente para pruebas; no se necesitan para servir el sitio. Las pruebas cubren las fórmulas, unidades, entradas inválidas, modalidades de vivienda, fuentes, comparación, texto del usuario y controles básicos de accesibilidad. No sustituyen una revisión visual en navegador.
+Con Node.js 22 o posterior: `npm ci` y `npm test`. Las pruebas cubren cálculos, entradas inválidas, modalidades de vivienda, cambios de categoría, referencias y controles accesibles.
 
 ## Mantenimiento
 
-Los coeficientes y tipos de proyecto están en `app.js`, en `SOURCES`, `PROJECTS` y `HOUSING`. Al actualizar una referencia, ajusta también la explicación y la ficha correspondiente en `index.html`, y verifica las pruebas. Evita presentar un comunicado histórico o una razón de un proyecto como metodología universal o coeficiente actualizado.
+Los coeficientes y tipos de proyecto están en `app.js`, en `SOURCES`, `PROJECTS` y `HOUSING`. Al actualizar una referencia, ajusta también la ficha de `index.html` y verifica las pruebas.

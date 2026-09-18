@@ -20,130 +20,86 @@ function setup(t) {
   return { dom, get, set, category };
 }
 
-test('Carreteras: 100 mdp produce 100 directos, 200 indirectos y 300 totales', t => {
-  const { get } = setup(t);
+test('Calles calcula empleo por inversión y rechaza entradas inválidas', t => {
+  const { get, set } = setup(t);
   assert.equal(get('total').textContent, '300');
   assert.equal(get('direct').textContent, '100');
   assert.equal(get('indirect').textContent, '200');
-});
-
-test('Cambiar unidades conserva la inversión, incluso con centavos', t => {
-  const { get, set } = setup(t);
-  set('unit', 'pesos');
-  assert.equal(get('investment').value, '100000000');
-  assert.equal(get('total').textContent, '300');
-  set('investment', '0.01');
-  set('unit', 'millions');
-  assert.equal(get('investment').value, '0.00000001');
-  assert.equal(get('error').textContent, '');
-  assert.equal(get('total').textContent, '< 0.01');
-  set('unit', 'pesos');
-  assert.equal(get('investment').value, '0.01');
-});
-
-test('Rechaza montos ambiguos, negativos, vacíos y fuera de rango; acepta cero', t => {
-  const { get, set } = setup(t);
-  for (const value of ['', '-1', '1,000', 'NaN', 'Infinity', '1e3', '1000001', '12abc']) {
+  for (const value of ['', '-1', '1,000', 'NaN', 'Infinity', '1e3', '1000001']) {
     set('investment', value);
-    assert.equal(get('total').textContent, '—', value);
-    assert.equal(get('save').disabled, true, value);
-    assert.equal(get('investment').getAttribute('aria-invalid'), 'true', value);
+    assert.equal(get('total').textContent, '—');
+    assert.equal(get('investment').getAttribute('aria-invalid'), 'true');
   }
   set('investment', '0');
   assert.equal(get('total').textContent, '0');
-  assert.equal(get('save').disabled, false);
+  set('investment', '0.001');
+  assert.equal(get('total').textContent, '< 0.01');
 });
 
-test('Agua conserva la razón completa: 1,400 mdp equivale a 3,000 empleos', t => {
+test('Categorías simplificadas conservan sus referencias y unidades', t => {
   const { get, set, category } = setup(t);
-  category('agua'); set('investment', '1400');
-  assert.equal(get('total').textContent, '3,000');
+  assert.equal(get('project').options.length, 2);
+  set('project', 'transport');
+  assert.equal(get('total').textContent, '400');
+  assert.match(get('source-title').textContent, /Banobras/);
   assert.equal(get('direct').textContent, '—');
-  assert.equal(get('indirect').textContent, '—');
-  assert.match(get('evidence-badge').textContent, /Caso de referencia/);
-  set('project', 'sanitation');
-  assert.equal(get('total').textContent, '5,600');
-  assert.match(get('source-title').textContent, /2013/);
+  for (const [key, title] of [['agua', 'Obras en infraestructura hidráulica'], ['infraestructura', 'Obra de infraestructura pública']]) {
+    category(key);
+    assert.equal(get('input-title').textContent, title);
+    assert.equal(get('project-fields').hidden, true);
+    assert.equal(get('investment-fields').hidden, false);
+    assert.equal(get('total').textContent, key === 'agua' ? '214.29' : '400');
+    assert.match(get('evidence-badge').textContent, key === 'agua' ? /Caso de referencia/ : /histórica/);
+  }
 });
 
-test('CONAVI necesita costo y conserva las cuatro modalidades originales', t => {
+test('Vivienda calcula las cuatro intervenciones e ignora la inversión oculta', t => {
   const { get, set, category } = setup(t);
-  category('infraestructura');
-  assert.equal(get('total').textContent, '—');
-  set('cost', '0'); assert.equal(get('total').textContent, '—');
-  set('cost', '500000'); set('investment', '10');
+  set('investment', 'invalid');
+  category('vivienda');
+  assert.equal(get('investment-fields').hidden, true);
+  set('homes', '20');
   for (const [type, direct, total] of [['nueva', '90', '120'], ['parcial', '60', '90'], ['ampliacion', '70', '100'], ['mejoramiento', '60', '90']]) {
     set('intervention', type);
     assert.equal(get('direct').textContent, direct);
     assert.equal(get('indirect').textContent, '30');
     assert.equal(get('total').textContent, total);
   }
-  set('project', 'public');
-  assert.equal(get('housing-fields').hidden, true);
-  assert.equal(get('direct').textContent, '—');
-});
-
-test('Seguridad expone referencia histórica; puentes identifican la aproximación', t => {
-  const { get, set, category } = setup(t);
-  category('seguridad');
-  assert.equal(get('total').textContent, '400');
-  assert.match(get('evidence-badge').textContent, /histórica/);
-  assert.match(get('source-description').textContent, /2013/);
-  assert.equal(get('direct').textContent, '—');
-  category('movilidad'); set('project', 'bridge');
-  assert.match(get('evidence-badge').textContent, /Aproximación/);
-});
-
-test('Coeficiente propio requiere atribución y trata el texto como datos', t => {
-  const { dom, get, set } = setup(t);
-  set('basis', 'custom'); set('custom-factor', '3.5');
-  assert.equal(get('total').textContent, '—');
-  const attribution = '<img src=x onerror=alert(1)> Estudio local, 2026';
-  set('custom-source', attribution);
-  assert.equal(get('total').textContent, '350');
-  assert.equal(get('active-source').hidden, true);
-  assert.equal(get('direct').textContent, '—');
-  get('save').click();
-  assert.match(get('scenario-rows').textContent, /Estudio local, 2026/);
-  assert.equal(dom.window.document.querySelectorAll('img').length, 0);
-  set('custom-factor', '0'); assert.equal(get('total').textContent, '0');
-});
-
-test('Comparación conserva resultados, limita a cuatro y permite eliminar y limpiar', t => {
-  const { get, set } = setup(t);
-  get('save').click();
-  set('investment', '200');
-  assert.equal(get('scenario-rows').children[0].children[3].textContent, '300');
-  get('save').click(); get('save').click(); get('save').click();
-  assert.equal(get('scenario-rows').children.length, 4);
-  assert.equal(get('save').disabled, true);
-  get('scenario-rows').querySelector('button').click();
-  assert.equal(get('save').disabled, false);
-  assert.equal(get('scenario-rows').children.length, 3);
-  get('clear').click();
-  assert.equal(get('comparison').hidden, true);
-});
-
-test('Todos los proyectos producen resultados finitos con los datos necesarios', t => {
-  const { dom, get, set, category } = setup(t);
-  for (const button of dom.window.document.querySelectorAll('[data-category]')) {
-    category(button.dataset.category);
-    for (const option of [...get('project').options]) {
-      set('project', option.value);
-      if (option.value === 'housing') set('cost', '500000');
-      assert.equal(get('error').textContent, '', option.value);
-      assert.doesNotMatch(get('total').textContent, /NaN|Infinity|—/, option.value);
-    }
+  assert.match(get('equation-units').textContent, /viviendas/);
+  for (const value of ['', '-1', '2.5', '1,000', '1000001']) {
+    set('homes', value);
+    assert.equal(get('total').textContent, '—');
+    assert.equal(get('homes').getAttribute('aria-invalid'), 'true');
   }
+  set('homes', '0');
+  assert.equal(get('total').textContent, '0');
+  category('movilidad');
+  assert.equal(get('total').textContent, '—');
+  set('investment', '100');
+  assert.equal(get('total').textContent, '300');
+  assert.equal(get('housing-fields').hidden, true);
+  assert.match(get('equation-units').textContent, /millón/);
 });
 
-test('Impresión, etiquetas y enlaces internos están conectados', t => {
+test('Controles eliminados no aparecen y etiquetas y enlaces siguen conectados', t => {
   const { dom, get } = setup(t);
-  let printed = false; dom.window.print = () => { printed = true; };
-  get('print').click(); assert.equal(printed, true);
+  for (const id of ['basis', 'custom-source', 'custom-factor', 'save', 'print', 'comparison', 'unit', 'cost']) assert.equal(get(id), null);
   const doc = dom.window.document;
+  assert.equal(doc.querySelectorAll('[data-amount]').length, 0);
   const ids = [...doc.querySelectorAll('[id]')].map(element => element.id);
   assert.equal(ids.length, new Set(ids).size);
   for (const link of doc.querySelectorAll('a[href^="#"]')) assert.ok(get(link.hash.slice(1)), link.hash);
   for (const control of doc.querySelectorAll('input,select')) assert.ok(control.hasAttribute('aria-label') || doc.querySelector(`label[for="${control.id}"]`), control.id);
+});
+
+test('Agua conserva la referencia de Campeche y su precisión; calles identifica la aproximación', t => {
+  const { get, set, category } = setup(t);
+  assert.equal(get('project').selectedOptions[0].textContent, 'Calles');
+  assert.match(get('source-description').textContent, /aproximación/);
+  category('agua');
+  set('investment', '1400');
+  assert.equal(get('total').textContent, '3,000');
+  assert.equal(get('direct').textContent, '—');
+  assert.match(get('source-title').textContent, /Agua para Campeche/);
+  assert.match(get('active-source').href, /ucs.campeche.gob.mx/);
 });
