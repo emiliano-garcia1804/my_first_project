@@ -30,3 +30,7 @@ Con Node.js 22 o posterior: `npm ci` y `npm test`. Las pruebas cubren cálculos,
 ## Mantenimiento
 
 Los coeficientes y tipos de proyecto están en `app.js`, en `SOURCES`, `PROJECTS` y `HOUSING`. Al actualizar una referencia, ajusta también la ficha de `index.html` y verifica las pruebas.
+
+## GitHub Pages
+
+Deploy `index.html`, `styles.css`, and `app.js` together from the same revision. CSS and JavaScript URLs include a version query to avoid mixing cached assets with updated HTML. Change the `v` value in `index.html` whenever either asset changes. After deployment, use Ctrl+Shift+R to reload cached HTML.
